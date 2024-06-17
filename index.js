@@ -1,28 +1,10 @@
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const blogs = require('./api/blogsData.json')
-const port = process.env.PORT || 5000;
+const jsonServer = require("json-server"); // importing json-server library
+const server = jsonServer.create();
+const router = jsonServer.router("db.json");
+const middlewares = jsonServer.defaults();
+const port = process.env.PORT || 8080; //  chose port from here like 8080, 3001
 
-// middleware
-app.use(cors())
-app.use(express.json())
+server.use(middlewares);
+server.use(router);
 
-app.get('/', (req, res) => {
-    res.send("Blog server is running!")
-});
-
-app.get('/blogs', (req, res) => {
-  res.send(blogs)
-})
-app.get('/blogs/:id', (req, res) => {
-  const id = parseInt(req.params.id);
-  // console.log(id)
-  const blog = blogs.filter(b => b.id === id);
-  // console.log(blog)
-  res.send(blog)
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+server.listen(port);
